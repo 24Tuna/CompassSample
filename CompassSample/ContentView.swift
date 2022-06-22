@@ -6,15 +6,21 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct ContentView: View {
-    @ObservedObject var viewModel = ViewModel()
+
+    @ObservedObject var manager = LocationManager()
+
     var body: some View {
-        Image("CompassImage")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 200, height: 200)
-            .rotationEffect(Angle())
+        let heading   = $manager.heading.wrappedValue
+
+        VStack{
+            Text("北方向: \(heading)")
+            
+            Image("CompassImage")
+                .rotationEffect(Angle(degrees: -heading))
+        }
     }
 }
 

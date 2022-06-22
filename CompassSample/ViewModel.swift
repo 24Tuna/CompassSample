@@ -5,25 +5,31 @@
 //  Created by cmStudent on 2022/04/21.
 //
 
-import Foundation
-import SwiftUI
 import MapKit
 
-class ViewModel:NSObject,ObservableObject,CLLocationManagerDelegate {
-    
+class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
+
     @Published var heading:CLLocationDirection = 0.0
-    
-    let model = RotationModel()
-//    @Binding let needleView =
-    override init(){
-        model.viewDidLoad()
+    let manager = CLLocationManager()
+
+    override init() {
+        super.init()
+
+        manager.delegate = self
+        manager.requestWhenInUseAuthorization()
+
+        //電子コンパス設定
+        manager.headingFilter      = kCLHeadingFilterNone
+        manager.headingOrientation = .portrait
+        manager.startUpdatingHeading()
     }
-    
-//    func locationManager(_ manager: CLLocationManager,didUpdateHeading newHeading : CLHeading){
-//        needleView.transform = CGAffineTransform.init(rotationAngle: CGFloat(-newHeading.magneticHeading) * CGFloat.pi / 180)
-//    }
-    
+
+    //電子コンパス値取得
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         self.heading = newHeading.magneticHeading
     }
+
 }
+
+
+
